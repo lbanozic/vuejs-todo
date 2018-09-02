@@ -1,0 +1,125 @@
+<!doctype html>
+
+<html>
+
+<head>
+
+    <!-- Meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/_inc/bootstrap.css">
+    <link rel="stylesheet" href="css/style.css">
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/png" href="img/favicon.png"/>
+
+    <!-- Title -->
+    <title>Demo - TODO list</title>
+
+</head>
+
+<body>
+
+<div id="todo-container" class="container" v-cloak>
+
+    <!-- Header -->
+    <div id="head-wrapper">
+        <div class="row">
+            <div class="col-sm-6">
+
+                <!-- Header main title -->
+                <h1>TODO list</h1>
+            </div>
+
+            <div class="col-sm-6 countContainer">
+
+                <!-- Active list items count -->
+                <div>Active:<span class="itemsCount">{{ activeItemsCount }}</span></div>
+
+                <!-- Completed list items count -->
+                <div>Completed:<span class="itemsCount">{{ completedItemsCount }}</span></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- New item -->
+    <div class="list-item-wrapper">
+        <div class="row">
+
+            <!-- Item name -->
+            <div class="col-sm-11">
+                <input type="text" id="newItemName" class="form-control" placeholder="Enter new item"
+                       v-model="newItemName" v-on:keyup="validateNewItemName" v-on:focus="removeErrors"
+                       v-on:blur="removeErrors" v-on:keyup.enter="addItem">
+            </div>
+
+            <!-- Add item button -->
+            <div class="col-sm-1">
+                <button id="itemAdd" class="tooltip" v-on:click="addItem">
+                    <img src="img/item-add.png">
+                    <span class="tooltiptext">Add</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Item name validation error message -->
+        <div v-if="!newItemNameValid">
+            <span class="itemNameErrorMessage">Item name must be entered.</span>
+        </div>
+    </div>
+
+    <!-- List of items -->
+    <div v-if="todoItems.length">
+        <div class="list-item-wrapper" v-for="item in todoItems" v-bind:key="item.id">
+            <div class="row">
+                <div class="col-sm-8">
+
+                    <!-- Item completed checkbox -->
+                    <label class="checkBox">
+                        <input type="checkbox" class="form-check-input" v-model="item.completed"
+                               v-on:change="sortItems">
+                        <span class="checkboxIcon"></span>
+                    </label>
+
+                    <!-- Item name -->
+                    <input type="text" class="itemName" v-model.lazy="item.name"
+                           v-bind:class="{ completed: item.completed }"
+                           v-on:keydown.backspace="deleteItemIfEmpty(item)">
+                </div>
+
+                <!-- Item time -->
+                <div class="col-sm-3 text-right">
+                    <span class="itemAddedTime">{{ item.time.slice(0, -3) }}</span>
+                </div>
+
+                <!-- Delete item button -->
+                <div class="col-sm-1">
+                    <button class="tooltip itemDelete" v-on:click="deleteItem(item.id)">
+                        <img src="img/item-delete.png">
+                        <span class="tooltiptext">Delete</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- No items message -->
+    <div v-else class="list-item-wrapper">
+        <p class="noTodosMessage">There are currently no TODO items.</p>
+    </div>
+
+</div>
+
+<!-- JavaScript -->
+<script src="js/_inc/jquery.slim.js"></script>
+<script src="js/_inc/popper.min.js"></script>
+<script src="js/_inc/axios.js"></script>
+<script src="js/_inc/bootstrap.js"></script>
+<script src="js/_inc/vue.js"></script>
+<script src="js/todo.js"></script>
+
+</body>
+
+</html>
